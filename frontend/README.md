@@ -1,11 +1,56 @@
 # In Paris — frontend
 
-React + TypeScript + Vite.
+React + TypeScript + Vite app: events in Paris by day and category, with a list and a map.
+
+## Requirements
+
+- Node.js 20+
+- The backend running on http://localhost:8000 (see [`../backend/README.md`](../backend/README.md))
+
+## Run
+
+From the `frontend/` folder:
 
 ```bash
 npm install
-npm run dev     # http://localhost:5173
+npm run dev
 ```
 
-In dev, requests to `/api/*` are proxied to the FastAPI backend on `http://localhost:8000`
-(e.g. `fetch('/api/events')` → `GET http://localhost:8000/events`), so start the backend first.
+Open http://localhost:5173.
+
+In development, requests to `/api/*` are proxied to the backend (`/api/events` → `http://localhost:8000/events`), so no CORS setup is needed.
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Type-check and build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Lint with oxlint |
+
+## Configuration
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_URL` | `/api` | Backend base URL (set it when the backend is not behind the dev proxy) |
+
+## Stack
+
+Tailwind CSS v4 (design tokens in `src/index.css`), react-leaflet for the map (Esri tiles, no key), date-fns for dates.
+
+## Structure
+
+```
+src/
+├── App.tsx              page layout and UI state (day, category, selected event)
+├── api.ts               types + fetch functions (the only place that calls the backend)
+├── categories.ts        category labels and colours
+├── hooks/useEvents.ts   loading, errors, pagination ("load more")
+├── utils/format.ts      date, time, venue and price formatting
+└── components/
+    ├── ui/              Pill, Icon, CopyButton, StatusMessage
+    ├── layout/          Header, Footer
+    ├── events/          DayPicker, CategoryBar, EventList, EventCard, EventListSkeleton
+    └── map/             EventMap, MapPopupCard, MapControls
+```
