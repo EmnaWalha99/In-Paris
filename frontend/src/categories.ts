@@ -1,4 +1,4 @@
-import type { CategoryKey } from './api'
+import type { CategoryKey } from './types'
 
 export interface Category {
   key: CategoryKey

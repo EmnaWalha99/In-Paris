@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { fetchEvents, type CategoryKey, type Event } from '../api'
+import type { CategoryKey, Event } from '../types'
+import { fetchEvents } from '../api'
 import { PAGE_SIZE } from '../config'
 
 export type EventsStatus = 'loading' | 'ready' | 'error'

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { CategoryKey } from './api'
+import type { CategoryKey } from './types'
 import { CATEGORIES } from './categories'
 import { CategoryBar } from './components/events/CategoryBar'
 import { DayPicker } from './components/events/DayPicker'

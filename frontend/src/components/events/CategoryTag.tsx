@@ -1,4 +1,4 @@
-import type { CategoryKey } from '../../api'
+import type { CategoryKey } from '../../types'
 import { CATEGORY_BY_KEY } from '../../categories'
 
 export function CategoryTag({ category }: { category: CategoryKey }) {

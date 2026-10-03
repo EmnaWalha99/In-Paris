@@ -1,6 +1,6 @@
 import { addDays, differenceInMinutes, format, isThisYear, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type { Event, Session } from '../api'
+import type { Event, Session } from '../types'
 import { TEXTS } from '../texts'
 
 export interface DayOption {

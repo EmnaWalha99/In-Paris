@@ -1,5 +1,5 @@
 import type { MouseEvent } from 'react'
-import type { Event } from '../../api'
+import type { Event } from '../../types'
 import { TEXTS } from '../../texts'
 import { formatPrice, formatSessionTime } from '../../utils/format'
 import { formatCoordinates, formatFullAddress, formatVenue } from '../../utils/location'

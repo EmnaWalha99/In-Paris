@@ -1,5 +1,5 @@
 import type { LatLngTuple } from 'leaflet'
-import type { Event, Location } from '../api'
+import type { Event, Location } from '../types'
 
 export type LocatedEvent = Event & { location: Location & { lat: number; lon: number } }
 

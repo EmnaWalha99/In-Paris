@@ -1,4 +1,4 @@
-import type { Event } from '../../api'
+import type { Event } from '../../types'
 import type { EventsStatus } from '../../hooks/useEvents'
 import { TEXTS } from '../../texts'
 import { formatLongDate } from '../../utils/format'

@@ -1,4 +1,4 @@
-import type { CategoryKey } from '../../api'
+import type { CategoryKey } from '../../types'
 import type { Category } from '../../categories'
 import { TEXTS } from '../../texts'
 import { Pill } from '../ui/Pill'

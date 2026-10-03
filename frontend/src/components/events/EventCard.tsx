@@ -1,5 +1,5 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
-import type { Event } from '../../api'
+import type { Event } from '../../types'
 import { CATEGORY_BY_KEY } from '../../categories'
 import { TEXTS } from '../../texts'
 import { formatDuration, formatSessionTime, isAllDay } from '../../utils/format'

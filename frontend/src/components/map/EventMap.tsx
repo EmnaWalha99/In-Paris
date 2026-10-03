@@ -1,7 +1,7 @@
 import { latLngBounds, point, type Map as LeafletMap } from 'leaflet'
 import { useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
-import type { Event } from '../../api'
+import type { Event } from '../../types'
 import { MAP } from '../../config'
 import { TEXTS } from '../../texts'
 import { isLocated, toLatLng, type LocatedEvent } from '../../utils/location'
