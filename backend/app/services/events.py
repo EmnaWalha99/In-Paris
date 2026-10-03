@@ -26,7 +26,7 @@ async def list_events(
     matches = []
     for event in events:
         sessions = [s for s in event.sessions if s.start.date() == day]
-        if sessions and (not category or category.lower() in (tag.lower() for tag in event.tags)):
+        if sessions and (not category or event.category == category):
             matches.append(event.model_copy(update={"sessions": sessions}))
     matches.sort(key=lambda event: event.sessions[0].start)
 
