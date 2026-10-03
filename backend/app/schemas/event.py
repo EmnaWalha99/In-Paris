@@ -20,6 +20,7 @@ class Event(BaseModel):
     id: str
     title: str
     description: str | None = None
+    category: str = "autre"  # concert | theatre | danse | expo | sport | enfants | atelier | autre
     tags: list[str] = []
     sessions: list[Session] = []
     location: Location

@@ -1,6 +1,6 @@
-// Types mirror backend/app/schemas/event.py.
-// "/api" goes through the Vite dev proxy (see vite.config.ts).
 const API_URL = import.meta.env.VITE_API_URL || '/api'
+
+export type CategoryKey = 'concert' | 'theatre' | 'danse' | 'expo' | 'sport' | 'enfants' | 'atelier' | 'autre'
 
 export interface Session {
   start: string // ISO datetime
@@ -11,6 +11,7 @@ export interface Event {
   id: string
   title: string
   description: string | null
+  category: CategoryKey
   tags: string[]
   sessions: Session[]
   location: { name: string | null; address: string | null; lat: number | null; lon: number | null }
@@ -29,7 +30,7 @@ export interface EventList {
 
 export interface EventFilters {
   date?: string // YYYY-MM-DD, defaults to today on the backend
-  category?: string
+  category?: CategoryKey
   limit?: number
   offset?: number
 }

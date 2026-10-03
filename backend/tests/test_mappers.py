@@ -41,3 +41,9 @@ def test_map_event_missing_fields():
     assert event.sessions == []
     assert event.location.address is None
     assert event.location.lat is None
+
+
+def test_map_event_category():
+    assert map_event(make_record(qfap_tags="Concert;Festival")).category == "concert"
+    assert map_event(make_record(qfap_tags="Atelier;Enfants")).category == "enfants"
+    assert map_event(make_record(qfap_tags="Conférence")).category == "autre"

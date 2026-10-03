@@ -9,6 +9,17 @@ from datetime import datetime
 
 from app.schemas.event import Event, Location, Session
 
+# Main category -> Paris API tags. Order matters: the first match wins.
+CATEGORIES = {
+    "concert": {"Concert"},
+    "theatre": {"Théâtre", "Humour"},
+    "danse": {"Danse", "Spectacle musical", "Cirque"},
+    "expo": {"Expo", "Art contemporain", "Peinture", "Photo", "Street-art", "BD"},
+    "sport": {"Sport"},
+    "enfants": {"Enfants"},
+    "atelier": {"Atelier", "Loisirs", "Balade urbaine", "Gourmand", "Brocante"},
+}
+
 
 def _text(value) -> str | None:
     """Strip strings and turn empty values into None."""
@@ -43,6 +54,13 @@ def _sessions(occurrences: str | None) -> list[Session]:
     return sessions
 
 
+def _category(tags: list[str]) -> str:
+    for category, category_tags in CATEGORIES.items():
+        if category_tags.intersection(tags):
+            return category
+    return "autre"
+
+
 def _location(record: dict) -> Location:
     city = " ".join(filter(None, [_text(record.get("address_zipcode")), _text(record.get("address_city"))]))
     address = ", ".join(filter(None, [_text(record.get("address_street")), city]))
@@ -58,11 +76,13 @@ def _location(record: dict) -> Location:
 
 
 def map_event(record: dict) -> Event:
+    tags = [tag.strip() for tag in (record.get("qfap_tags") or "").split(";") if tag.strip()]
     return Event(
         id=str(record["id"]),
         title=_text(record.get("title")) or "Sans titre",
         description=_text(record.get("lead_text")),
-        tags=[tag.strip() for tag in (record.get("qfap_tags") or "").split(";") if tag.strip()],
+        category=_category(tags),
+        tags=tags,
         sessions=_sessions(record.get("occurrences")),
         location=_location(record),
         price_type=_text(record.get("price_type")),

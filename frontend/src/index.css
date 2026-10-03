@@ -1,14 +1,132 @@
-:root {
-  font-family: system-ui, sans-serif;
-  color-scheme: light dark;
+@import 'tailwindcss';
+
+@theme {
+  --color-surface: #f8f7f5;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f3efe9;
+  --color-surface-container: #eee6da;
+  --color-surface-container-high: #e9ded0;
+  --color-surface-container-highest: #e3d7c4;
+  --color-outline-variant: #dccdbb;
+  --color-on-surface: #46100f;
+  --color-on-surface-variant: #6b4f49;
+  --color-primary: #ae5c4c;
+  --color-on-primary: #f8f7f5;
+  --color-secondary: #691619;
+  --color-tertiary: #7b6e5d;
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-body-md: 15px;
+  --text-body-md--line-height: 24px;
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 20px;
+  --text-label-md: 11px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.12em;
+  --text-label-md--font-weight: 600;
+  --text-label-sm: 10px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.15em;
+  --text-label-sm--font-weight: 600;
+
+  --animate-fade-in-up: fade-in-up 0.4s ease-out both;
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
-body {
-  margin: 0;
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: var(--color-surface);
+  }
 }
 
-main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 16px;
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.leaflet-container {
+  background: var(--color-surface-container);
+  font-family: var(--font-sans);
+}
+
+.leaflet-tile-pane {
+  filter: sepia(0.25) contrast(1.15) brightness(0.97);
+}
+
+.event-marker {
+  animation: marker-in 0.4s ease-out both;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 1px 2px rgb(70 16 15 / 0.45));
+}
+
+.leaflet-tooltip.event-tooltip {
+  max-width: 240px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: 0 4px 12px rgb(70 16 15 / 0.15);
+  color: var(--color-on-surface);
+  font-family: var(--font-serif);
+  font-size: 14px;
+  white-space: normal;
+}
+
+.event-tooltip .time {
+  margin-right: 6px;
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.event-tooltip::before {
+  border-top-color: var(--color-surface);
+}
+
+@keyframes marker-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
 }
