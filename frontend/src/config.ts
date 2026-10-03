@@ -1,6 +1,7 @@
 import type { LatLngTuple } from 'leaflet'
 
-export const API_URL = import.meta.env.VITE_API_URL || '/api'
+// Always relative: the Vite proxy (dev), nginx (Docker) and Render (prod) forward /api to the backend.
+export const API_URL = '/api'
 
 export const PAGE_SIZE = 30
 export const DAYS_SHOWN = 7

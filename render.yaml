@@ -29,8 +29,6 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
-      - key: VITE_API_URL
-        value: /api
     routes:
       - type: rewrite                 # same role as nginx in Docker
         source: /api/*
