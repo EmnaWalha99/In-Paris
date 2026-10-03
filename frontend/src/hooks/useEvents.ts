@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { fetchEvents, type CategoryKey, type Event } from '../api'
-
-const PAGE_SIZE = 30
+import { PAGE_SIZE } from '../config'
 
 export type EventsStatus = 'loading' | 'ready' | 'error'
 
 interface LoadedPage {
-  key: string // `${date}|${category}` the items belong to
+  key: string // the date/category the items belong to
   items: Event[]
   total: number
 }
@@ -22,13 +21,13 @@ export function useEvents(date: string, category: CategoryKey | null) {
 
   useEffect(() => {
     let cancelled = false
-    fetchEvents({ date, category: category ?? undefined, limit: PAGE_SIZE })
-      .then((data) => !cancelled && setPage({ key: `${date}|${category}`, items: data.items, total: data.total }))
-      .catch(() => !cancelled && setFailedRequest(`${date}|${category}|${reloadCount}`))
+    fetchEvents({ date, category, limit: PAGE_SIZE })
+      .then(({ items, total }) => !cancelled && setPage({ key, items, total }))
+      .catch(() => !cancelled && setFailedRequest(request))
     return () => {
       cancelled = true
     }
-  }, [date, category, reloadCount])
+  }, [date, category, key, request])
 
   const isCurrent = page?.key === key
   const items = isCurrent ? page.items : []
@@ -36,15 +35,12 @@ export function useEvents(date: string, category: CategoryKey | null) {
   const status: EventsStatus = isCurrent ? 'ready' : failedRequest === request ? 'error' : 'loading'
 
   const loadMore = async () => {
-    if (!isCurrent) return
     setLoadingMore(true)
     try {
-      const data = await fetchEvents({ date, category: category ?? undefined, limit: PAGE_SIZE, offset: items.length })
-      setPage((previous) =>
-        previous?.key === key ? { ...previous, items: [...previous.items, ...data.items] } : previous,
-      )
+      const next = await fetchEvents({ date, category, limit: PAGE_SIZE, offset: items.length })
+      setPage((previous) => (previous?.key === key ? { ...previous, items: [...previous.items, ...next.items] } : previous))
     } catch {
-      // Keep the current list; the user can click "load more" again.
+      // Keep the current list: the user can click "load more" again.
     } finally {
       setLoadingMore(false)
     }

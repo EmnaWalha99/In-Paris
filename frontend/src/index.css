@@ -64,6 +64,15 @@
   }
 }
 
+/* Leaflet panes and controls go up to z-index 1000. */
+@utility z-map-overlay {
+  z-index: 1000;
+}
+
+@utility z-above-map {
+  z-index: 1100;
+}
+
 @utility no-scrollbar {
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -93,6 +102,8 @@
 }
 
 .event-marker {
+  stroke: var(--color-surface);
+  stroke-width: 2.5px;
   animation: marker-in 0.4s ease-out both;
   transform-box: fill-box;
   transform-origin: center;

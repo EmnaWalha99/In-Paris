@@ -44,13 +44,17 @@ Tailwind CSS v4 (design tokens in `src/index.css`), react-leaflet for the map (E
 ```
 src/
 ├── App.tsx              page layout and UI state (day, category, selected event)
-├── api.ts               types + fetch functions (the only place that calls the backend)
+├── api.ts               types + fetchEvents (the only place that calls the backend)
+├── config.ts            settings: API URL, page size, map centre/zoom/tiles
+├── texts.ts             all UI copy (French)
 ├── categories.ts        category labels and colours
 ├── hooks/useEvents.ts   loading, errors, pagination ("load more")
-├── utils/format.ts      date, time, venue and price formatting
+├── utils/
+│   ├── format.ts        dates, session times, durations, prices
+│   └── location.ts      venue, address, coordinates
 └── components/
     ├── ui/              Pill, Icon, CopyButton, StatusMessage
-    ├── layout/          Header, Footer
-    ├── events/          DayPicker, CategoryBar, EventList, EventCard, EventListSkeleton
-    └── map/             EventMap, MapPopupCard, MapControls
+    ├── layout/          Header, Footer, MobileViewToggle
+    ├── events/          DayPicker, CategoryBar, CategoryTag, EventList, EventCard, EventListSkeleton
+    └── map/             EventMap, EventMarker, MapPopupCard, MapControls
 ```

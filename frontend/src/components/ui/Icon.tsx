@@ -1,11 +1,14 @@
 interface IconProps {
-  name: string
+  name: string // Material Symbols name, e.g. "location_on"
+  size?: number
   className?: string
 }
 
-export function Icon({ name, className = '' }: IconProps) {
+const DEFAULT_SIZE = 18
+
+export function Icon({ name, size = DEFAULT_SIZE, className = '' }: IconProps) {
   return (
-    <span className={`material-symbols-outlined ${className}`} aria-hidden="true">
+    <span className={`material-symbols-outlined ${className}`} style={{ fontSize: size }} aria-hidden="true">
       {name}
     </span>
   )

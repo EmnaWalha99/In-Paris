@@ -6,14 +6,11 @@ import { DayPicker } from './components/events/DayPicker'
 import { EventList } from './components/events/EventList'
 import { Footer } from './components/layout/Footer'
 import { Header } from './components/layout/Header'
+import { MobileViewToggle, type MobileView } from './components/layout/MobileViewToggle'
 import { EventMap } from './components/map/EventMap'
-import { Icon } from './components/ui/Icon'
+import { DAYS_SHOWN } from './config'
 import { useEvents } from './hooks/useEvents'
 import { getUpcomingDays } from './utils/format'
-
-const DAYS_SHOWN = 7
-
-type MobileView = 'list' | 'map'
 
 function App() {
   const days = useMemo(() => getUpcomingDays(DAYS_SHOWN), [])
@@ -24,11 +21,11 @@ function App() {
   const [mobileView, setMobileView] = useState<MobileView>('list')
   const events = useEvents(date, category)
 
+  // A new day or category means a new list: drop the selected event.
   const changeDate = (value: string) => {
     setDate(value)
     setActiveId(null)
   }
-
   const changeCategory = (value: CategoryKey | null) => {
     setCategory(value)
     setActiveId(null)
@@ -69,14 +66,7 @@ function App() {
           />
         </section>
 
-        <button
-          type="button"
-          onClick={() => setMobileView(mobileView === 'list' ? 'map' : 'list')}
-          className="absolute bottom-5 left-1/2 z-[1100] flex -translate-x-1/2 items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-label-md uppercase text-on-primary shadow-lg lg:hidden"
-        >
-          <Icon name={mobileView === 'list' ? 'map' : 'list'} className="text-[18px]" />
-          {mobileView === 'list' ? 'Carte' : 'Liste'}
-        </button>
+        <MobileViewToggle view={mobileView} onChange={setMobileView} />
       </main>
 
       <Footer />

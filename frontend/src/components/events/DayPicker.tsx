@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { TEXTS } from '../../texts'
 import { formatShortDate, type DayOption } from '../../utils/format'
 import { Icon } from '../ui/Icon'
 import { Pill } from '../ui/Pill'
@@ -22,8 +23,8 @@ export function DayPicker({ days, selected, onSelect }: DayPickerProps) {
       ))}
       <div className="relative shrink-0">
         <Pill active={isOtherDay} onClick={() => dateInput.current?.showPicker()}>
-          <Icon name="calendar_month" className="text-[16px]" />
-          {isOtherDay ? formatShortDate(selected) : <span className="sr-only">Choisir une date</span>}
+          <Icon name="calendar_month" size={16} />
+          {isOtherDay ? formatShortDate(selected) : <span className="sr-only">{TEXTS.pickDate}</span>}
         </Pill>
         {/* Invisible native date input: the pill opens its picker, anchored under the pill. */}
         <input

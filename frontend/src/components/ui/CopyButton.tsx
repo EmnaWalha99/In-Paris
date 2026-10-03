@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { TEXTS } from '../../texts'
 import { Icon } from './Icon'
 
 interface CopyButtonProps {
@@ -33,8 +34,8 @@ export function CopyButton({ value, label }: CopyButtonProps) {
       title={value}
       className="flex items-center gap-1.5 rounded-full bg-surface-container-high/60 px-2.5 py-1 text-label-sm uppercase text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
     >
-      <Icon name={copied ? 'check' : 'content_copy'} className={`text-[14px] ${copied ? 'text-primary' : ''}`} />
-      {copied ? 'Copié' : label}
+      <Icon name={copied ? 'check' : 'content_copy'} size={14} className={copied ? 'text-primary' : ''} />
+      {copied ? TEXTS.map.copied : label}
     </button>
   )
 }

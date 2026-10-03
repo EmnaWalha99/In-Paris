@@ -1,10 +1,17 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api'
+import { API_URL } from './config'
 
 export type CategoryKey = 'concert' | 'theatre' | 'danse' | 'expo' | 'sport' | 'enfants' | 'atelier' | 'autre'
 
 export interface Session {
   start: string // ISO datetime
   end: string | null
+}
+
+export interface Location {
+  name: string | null
+  address: string | null
+  lat: number | null
+  lon: number | null
 }
 
 export interface Event {
@@ -14,7 +21,7 @@ export interface Event {
   category: CategoryKey
   tags: string[]
   sessions: Session[]
-  location: { name: string | null; address: string | null; lat: number | null; lon: number | null }
+  location: Location
   price_type: string | null
   price_detail: string | null
   is_free: boolean
@@ -29,26 +36,17 @@ export interface EventList {
 }
 
 export interface EventFilters {
-  date?: string // YYYY-MM-DD, defaults to today on the backend
-  category?: CategoryKey
-  limit?: number
+  date: string // YYYY-MM-DD
+  category: CategoryKey | null
+  limit: number
   offset?: number
 }
 
-async function get<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`)
-  if (!response.ok) throw new Error(`API error ${response.status} on ${path}`)
+export async function fetchEvents({ date, category, limit, offset = 0 }: EventFilters): Promise<EventList> {
+  const params = new URLSearchParams({ date, limit: String(limit), offset: String(offset) })
+  if (category) params.set('category', category)
+
+  const response = await fetch(`${API_URL}/events?${params}`)
+  if (!response.ok) throw new Error(`API error ${response.status}`)
   return response.json()
-}
-
-export function fetchEvents(filters: EventFilters = {}): Promise<EventList> {
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(filters)) {
-    if (value !== undefined && value !== '') params.set(key, String(value))
-  }
-  return get(`/events?${params}`)
-}
-
-export function fetchEvent(id: string): Promise<Event> {
-  return get(`/events/${encodeURIComponent(id)}`)
 }
