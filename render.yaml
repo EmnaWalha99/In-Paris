@@ -1,0 +1,47 @@
+services:
+  # Backend: built from backend/Dockerfile
+  - type: web
+    name: in-paris-api
+    runtime: docker
+    rootDir: backend              # only changes in backend/ trigger a redeploy
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass # deploy only after the GitHub CI is green
+    envVars:
+      - key: PARIS_API_BASE_URL
+        value: https://opendata.paris.fr/api/explore/v2.1
+      - key: PARIS_API_DATASET
+        value: que-faire-a-paris-
+      - key: PARIS_API_TIMEOUT
+        value: "10"
+      - key: ENVIRONMENT
+        value: production
+
+  # Frontend: Vite build served from Render's CDN (no nginx needed)
+  - type: web
+    name: in-paris-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_API_URL
+        value: /api
+    routes:
+      - type: rewrite                 # same role as nginx in Docker
+        source: /api/*
+        destination: https://in-paris-api.onrender.com/*
+      - type: rewrite                 # React app: unknown paths -> index.html
+        source: /*
+        destination: /index.html
+    headers:                          # same security headers as nginx
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
