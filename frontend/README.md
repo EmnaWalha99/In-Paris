@@ -28,12 +28,17 @@ In development, requests to `/api/*` are proxied to the backend (`/api/events` â
 | `npm run build` | Type-check and build to `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Lint with oxlint |
+| `npm test` | Run the unit tests once (Vitest) |
+| `npm run test:watch` | Re-run the tests on every change |
 
 ## Configuration
 
 | Variable | Default | Description |
 |---|---|---|
 | `VITE_API_URL` | `/api` | Backend base URL (set it when the backend is not behind the dev proxy) |
+| `BACKEND_URL` | â€” | Docker only: where nginx forwards `/api` (e.g. `http://backend:8000`) |
+
+Copy `.env.example` to `.env` (development) and `.env.prod` (production); both are git-ignored.
 
 ## Stack
 

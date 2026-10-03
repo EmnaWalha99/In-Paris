@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push on the same branch cancels the run still in progress.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Detects which parts changed, so the other jobs only run when needed.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      docker: ${{ steps.filter.outputs.docker }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            ci: &ci
+              - '.github/workflows/**'
+            backend:
+              - *ci
+              - 'backend/**'
+            frontend:
+              - *ci
+              - 'frontend/**'
+            docker:
+              - *ci
+              - 'backend/**'
+              - 'frontend/**'
+              - 'docker-compose*.yml'
+
+  backend:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements*.txt
+      - run: pip install -r requirements-dev.txt
+      # The settings are public, so the template is enough (real secrets would come from GitHub Secrets).
+      - run: cp .env.example .env
+      - run: pytest
+
+  frontend:
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  # Builds both images and checks the frontend reaches the backend through nginx.
+  docker:
+    needs: [changes, backend, frontend]
+    # Runs when something relevant changed and no test job failed (a skipped job is fine).
+    if: >-
+      always() && needs.changes.outputs.docker == 'true' &&
+      !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cp backend/.env.example backend/.env
+          cp frontend/.env.example frontend/.env
+      - run: docker compose up --build -d --wait --wait-timeout 120
+      - run: curl --fail --retry 3 http://localhost:8080/api/health
+      - if: failure()
+        run: docker compose logs
+      - if: always()
+        run: docker compose down
