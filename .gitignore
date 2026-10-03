@@ -7,18 +7,30 @@ venv/
 .mypy_cache/
 .ruff_cache/
 
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+
 # Env / secrets
 .env
 .env.*
 !.env.example
 
-# Node / frontend
-node_modules/
-dist/
-build/
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # IDE / OS
 .vscode/
 .idea/
+*.suo
+*.sw?
 .DS_Store
 Thumbs.db
