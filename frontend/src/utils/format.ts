@@ -24,6 +24,8 @@ export function getUpcomingDays(count: number): DayOption[] {
   })
 }
 
+export const getNextDay = (isoDate: string) => format(addDays(parseISO(isoDate), 1), 'yyyy-MM-dd')
+
 function formatDate(isoDate: string, pattern: string): string {
   const date = parseISO(isoDate)
   return formatFr(date, isThisYear(date) ? pattern : `${pattern} yyyy`)

@@ -37,7 +37,7 @@ In development, requests to `/api/*` are proxied to the backend (`/api/events` â
 
 ## Stack
 
-Tailwind CSS v4 (design tokens in `src/index.css`), react-leaflet for the map (Esri tiles, no key), date-fns for dates.
+Tailwind CSS v4 (design tokens in `src/index.css`), TanStack Query for fetching and caching (one cache entry per day and category, next day preloaded), react-leaflet for the map (Esri tiles, no key), date-fns for dates.
 
 ## Structure
 
