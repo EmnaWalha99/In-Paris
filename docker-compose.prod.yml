@@ -1,0 +1,23 @@
+# Production: docker compose -f docker-compose.prod.yml up --build -d
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env.prod
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  frontend:
+    build: ./frontend
+    env_file: ./frontend/.env.prod
+    restart: unless-stopped
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    # nginx needs a few writable folders, kept in memory.
+    tmpfs: [/var/cache/nginx, /var/run, /tmp, /etc/nginx/conf.d]
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy

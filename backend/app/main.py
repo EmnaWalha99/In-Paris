@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 from app.api.events import router as events_router
 from app.clients.paris_api import ParisApiClient, ParisApiError
+from app.core.config import settings
 
 
 @asynccontextmanager
@@ -15,7 +16,9 @@ async def lifespan(app: FastAPI):
     await app.state.paris_client.close()
 
 
-app = FastAPI(title="Paris Events API", version="1.0.0", lifespan=lifespan)
+# The interactive docs are only exposed outside production.
+docs = {} if not settings.is_production else {"docs_url": None, "redoc_url": None, "openapi_url": None}
+app = FastAPI(title="Paris Events API", version="1.0.0", lifespan=lifespan, **docs)
 app.include_router(events_router)
 
 

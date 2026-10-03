@@ -40,13 +40,14 @@ The tests mock the Paris API, so they run without network access.
 
 ## Configuration
 
-Settings are read from `.env` (see `.env.example`):
+Settings are read from `.env` in development and `.env.prod` in production (both git-ignored, copied from `.env.example`):
 
 | Variable | Description |
 |---|---|
 | `PARIS_API_BASE_URL` | Opendatasoft API base URL |
 | `PARIS_API_DATASET` | Dataset id |
 | `PARIS_API_TIMEOUT` | Request timeout in seconds |
+| `ENVIRONMENT` | `development` or `production` (production hides `/docs`) |
 
 ## Structure
 
