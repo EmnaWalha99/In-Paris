@@ -44,7 +44,8 @@ Tailwind CSS v4 (design tokens in `src/index.css`), react-leaflet for the map (E
 ```
 src/
 ├── App.tsx              page layout and UI state (day, category, selected event)
-├── api.ts               types + fetchEvents (the only place that calls the backend)
+├── api.ts               fetchEvents (the only place that calls the backend)
+├── types.ts             API types, mirroring the backend schema
 ├── config.ts            settings: API URL, page size, map centre/zoom/tiles
 ├── texts.ts             all UI copy (French)
 ├── categories.ts        category labels and colours
