@@ -5,6 +5,14 @@ export const API_URL = import.meta.env.VITE_API_URL || '/api'
 export const PAGE_SIZE = 30
 export const DAYS_SHOWN = 7
 
+const MINUTE = 60_000
+
+export const QUERY_CACHE = {
+  staleTime: 5 * MINUTE, // a day's events are reused without refetching for 5 min
+  gcTime: 30 * MINUTE, // unused days stay in memory for 30 min
+  retry: 1,
+}
+
 export const DATA_SOURCE_URL = 'https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/'
 
 const ESRI_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas'
