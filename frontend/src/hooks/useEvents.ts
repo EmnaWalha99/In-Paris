@@ -1,60 +1,45 @@
-import { useEffect, useState } from 'react'
-import type { CategoryKey, Event } from '../types'
+import { infiniteQueryOptions, useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useMemo } from 'react'
 import { fetchEvents } from '../api'
 import { PAGE_SIZE } from '../config'
+import type { CategoryKey } from '../types'
+import { getNextDay } from '../utils/format'
 
 export type EventsStatus = 'loading' | 'ready' | 'error'
 
-interface LoadedPage {
-  key: string // the date/category the items belong to
-  items: Event[]
-  total: number
-}
+// One cache entry per day + category; each "load more" adds a page of PAGE_SIZE events.
+const eventsQuery = (date: string, category: CategoryKey | null) =>
+  infiniteQueryOptions({
+    queryKey: ['events', date, category],
+    queryFn: ({ pageParam, signal }) => fetchEvents({ date, category, limit: PAGE_SIZE, offset: pageParam }, signal),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      const loaded = pages.reduce((count, page) => count + page.items.length, 0)
+      return loaded < lastPage.total ? loaded : undefined
+    },
+  })
 
 export function useEvents(date: string, category: CategoryKey | null) {
-  const [page, setPage] = useState<LoadedPage | null>(null)
-  const [failedRequest, setFailedRequest] = useState<string | null>(null)
-  const [reloadCount, setReloadCount] = useState(0)
-  const [loadingMore, setLoadingMore] = useState(false)
+  const queryClient = useQueryClient()
+  const query = useInfiniteQuery(eventsQuery(date, category))
 
-  const key = `${date}|${category}`
-  const request = `${key}|${reloadCount}`
-
+  // Load the next day in the background so clicking it is instant.
   useEffect(() => {
-    let cancelled = false
-    fetchEvents({ date, category, limit: PAGE_SIZE })
-      .then(({ items, total }) => !cancelled && setPage({ key, items, total }))
-      .catch(() => !cancelled && setFailedRequest(request))
-    return () => {
-      cancelled = true
-    }
-  }, [date, category, key, request])
+    queryClient.prefetchInfiniteQuery(eventsQuery(getNextDay(date), category))
+  }, [queryClient, date, category])
 
-  const isCurrent = page?.key === key
-  const items = isCurrent ? page.items : []
-  const total = isCurrent ? page.total : 0
-  const status: EventsStatus = isCurrent ? 'ready' : failedRequest === request ? 'error' : 'loading'
-
-  const loadMore = async () => {
-    setLoadingMore(true)
-    try {
-      const next = await fetchEvents({ date, category, limit: PAGE_SIZE, offset: items.length })
-      setPage((previous) => (previous?.key === key ? { ...previous, items: [...previous.items, ...next.items] } : previous))
-    } catch {
-      // Keep the current list: the user can click "load more" again.
-    } finally {
-      setLoadingMore(false)
-    }
-  }
+  const items = useMemo(() => query.data?.pages.flatMap((page) => page.items) ?? [], [query.data])
+  // A failed "load more" keeps the events already loaded on screen.
+  const status: EventsStatus = query.data ? 'ready' : query.isError ? 'error' : 'loading'
 
   return {
     items,
-    total,
+    total: query.data?.pages[0].total ?? 0,
     status,
-    loadedFor: page?.key ?? '',
-    loadingMore,
-    hasMore: items.length < total,
-    loadMore,
-    retry: () => setReloadCount((count) => count + 1),
+    loadedFor: query.data ? `${date}|${category}` : '',
+    loadingMore: query.isFetchingNextPage,
+    hasMore: query.hasNextPage,
+    loadMore: () => query.fetchNextPage(),
+    retry: () => query.refetch(),
   }
 }
