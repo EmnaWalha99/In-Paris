@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react'
 import type { CategoryKey } from './types'
 import { CATEGORIES } from './categories'
+import { ArrondissementFilter } from './components/events/ArrondissementFilter'
 import { CategoryBar } from './components/events/CategoryBar'
 import { DayPicker } from './components/events/DayPicker'
 import { EventList } from './components/events/EventList'
 import { Footer } from './components/layout/Footer'
 import { Header } from './components/layout/Header'
 import { MobileViewToggle, type MobileView } from './components/layout/MobileViewToggle'
+import { ArrondissementLayer } from './components/map/ArrondissementLayer'
 import { EventMap } from './components/map/EventMap'
 import { DAYS_SHOWN } from './config'
 import { useEvents } from './hooks/useEvents'
@@ -17,26 +19,23 @@ function App() {
   const today = days[0].value
   const [date, setDate] = useState(today)
   const [category, setCategory] = useState<CategoryKey | null>(null)
+  const [arrondissements, setArrondissements] = useState<number[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<MobileView>('list')
-  const events = useEvents(date, category)
+  const events = useEvents(date, category, arrondissements)
 
-  // A new day or category means a new list: drop the selected event.
-  const changeDate = (value: string) => {
-    setDate(value)
-    setActiveId(null)
-  }
-  const changeCategory = (value: CategoryKey | null) => {
-    setCategory(value)
-    setActiveId(null)
-  }
+  // Kept sorted so [11, 5] and [5, 11] share the same cache entry.
+  const toggleArrondissement = (value: number) =>
+    setArrondissements((current) =>
+      current.includes(value) ? current.filter((a) => a !== value) : [...current, value].sort((a, b) => a - b),
+    )
 
   return (
     <div className="flex h-dvh w-full flex-col bg-surface font-sans text-on-surface">
       <Header>
-        <DayPicker days={days} selected={date} onSelect={changeDate} />
+        <DayPicker days={days} selected={date} onSelect={setDate} />
       </Header>
-      <CategoryBar categories={CATEGORIES} selected={category} onSelect={changeCategory} />
+      <CategoryBar categories={CATEGORIES} selected={category} onSelect={setCategory} />
 
       <main className="relative flex min-h-0 flex-1">
         <section className={`${mobileView === 'list' ? 'flex' : 'hidden'} w-full flex-col lg:flex lg:w-[440px] lg:shrink-0 xl:w-[480px]`}>
@@ -51,7 +50,14 @@ function App() {
             onActivate={setActiveId}
             onLoadMore={events.loadMore}
             onRetry={events.retry}
-            onBackToToday={date !== today ? () => changeDate(today) : undefined}
+            onBackToToday={date !== today ? () => setDate(today) : undefined}
+            filters={
+              <ArrondissementFilter
+                selected={arrondissements}
+                onRemove={toggleArrondissement}
+                onClear={() => setArrondissements([])}
+              />
+            }
           />
         </section>
 
@@ -63,7 +69,9 @@ function App() {
             onClose={() => setActiveId(null)}
             fitKey={events.loadedFor}
             visible={mobileView === 'map'}
-          />
+          >
+            <ArrondissementLayer selected={arrondissements} onToggle={toggleArrondissement} />
+          </EventMap>
         </section>
 
         <MobileViewToggle view={mobileView} onChange={setMobileView} />

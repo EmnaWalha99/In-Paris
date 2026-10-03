@@ -49,13 +49,13 @@ src/
 ├── config.ts            settings: API URL, page size, map centre/zoom/tiles
 ├── texts.ts             all UI copy (French)
 ├── categories.ts        category labels and colours
-├── hooks/useEvents.ts   loading, errors, pagination ("load more")
+├── hooks/useEvents.ts   events query: cache, pagination ("load more"), next-day prefetch
 ├── utils/
 │   ├── format.ts        dates, session times, durations, prices
 │   └── location.ts      venue, address, coordinates
 └── components/
     ├── ui/              Pill, Icon, CopyButton, StatusMessage
     ├── layout/          Header, Footer, MobileViewToggle
-    ├── events/          DayPicker, CategoryBar, CategoryTag, EventList, EventCard, EventListSkeleton
-    └── map/             EventMap, EventMarker, MapPopupCard, MapControls
+    ├── events/          DayPicker, CategoryBar, CategoryTag, ArrondissementFilter, EventList, EventCard, EventListSkeleton
+    └── map/             EventMap, EventMarker, ArrondissementLayer, MapPopupCard, MapControls
 ```

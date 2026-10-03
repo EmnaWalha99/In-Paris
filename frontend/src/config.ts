@@ -13,6 +13,8 @@ export const QUERY_CACHE = {
   retry: 1,
 }
 
+export const ARRONDISSEMENTS_URL = '/arrondissements.geojson' // Paris Open Data, simplified
+
 export const DATA_SOURCE_URL = 'https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/'
 
 const ESRI_TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas'
@@ -22,6 +24,7 @@ export const MAP = {
   zoom: 13,
   maxZoom: 16,
   fitPadding: 48,
+  arrondissementsPaneZIndex: 350, // below the markers (Leaflet overlay pane is 400)
   markerRadius: { default: 8, active: 12 },
   baseTilesUrl: `${ESRI_TILES}/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
   labelTilesUrl: `${ESRI_TILES}/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,

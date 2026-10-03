@@ -9,6 +9,7 @@ async def list_events(
     client: ParisApiClient,
     day: date,
     category: str | None = None,
+    arrondissements: list[int] | None = None,
     limit: int = 30,
     offset: int = 0,
 ) -> EventList:
@@ -26,8 +27,11 @@ async def list_events(
     matches = []
     for event in events:
         sessions = [s for s in event.sessions if s.start.date() == day]
-        if sessions and (not category or event.category == category):
-            matches.append(event.model_copy(update={"sessions": sessions}))
+        if not sessions or (category and event.category != category):
+            continue
+        if arrondissements and event.location.arrondissement not in arrondissements:
+            continue
+        matches.append(event.model_copy(update={"sessions": sessions}))
     matches.sort(key=lambda event: event.sessions[0].start)
 
     return EventList(total=len(matches), items=matches[offset : offset + limit])
