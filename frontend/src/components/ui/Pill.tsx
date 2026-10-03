@@ -3,13 +3,14 @@ import type { ReactNode } from 'react'
 interface PillProps {
   active: boolean
   onClick: () => void
-  variant?: 'outline' | 'soft'
+  variant?: 'outline' | 'soft' | 'inverse' // inverse: on the blue header
   children: ReactNode
 }
 
 const INACTIVE = {
   outline: 'border-outline-variant/60 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface',
   soft: 'border-transparent bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface',
+  inverse: 'border-on-secondary/30 text-on-secondary/85 hover:bg-on-secondary/10 hover:text-on-secondary',
 }
 
 export function Pill({ active, onClick, variant = 'outline', children }: PillProps) {

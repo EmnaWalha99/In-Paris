@@ -41,7 +41,7 @@ export function MapPopupCard({ event, onClose }: MapPopupCardProps) {
       </div>
       <h4 className="mb-1 line-clamp-1 font-serif text-headline-sm leading-snug">{event.title}</h4>
       <p className="flex items-center gap-1 text-body-sm text-on-surface-variant">
-        <Icon name="location_on" size={16} className="text-primary" />
+        <Icon name="location_on" size={16} className="text-primary-strong" />
         <span className="line-clamp-1">{formatVenue(event.location)}</span>
       </p>
       {address && <p className="ml-5 line-clamp-2 text-body-sm text-tertiary">{address}</p>}
@@ -58,7 +58,7 @@ export function MapPopupCard({ event, onClose }: MapPopupCardProps) {
             href={event.url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-label-sm uppercase text-primary hover:underline"
+            className="inline-flex items-center gap-1 text-label-sm uppercase text-secondary hover:underline"
           >
             {TEXTS.map.details}
             <Icon name="arrow_forward" size={14} />

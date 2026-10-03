@@ -21,7 +21,7 @@ export function MapControls({ onZoomIn, onZoomOut, onRecenter }: MapControlsProp
         <Icon name="remove" size={20} />
       </button>
       <div className={DIVIDER} />
-      <button type="button" className={`${BUTTON} text-primary`} onClick={onRecenter} title={TEXTS.map.recenter}>
+      <button type="button" className={`${BUTTON} text-secondary`} onClick={onRecenter} title={TEXTS.map.recenter}>
         <Icon name="my_location" />
       </button>
     </div>

@@ -1,19 +1,21 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-surface: #f8f7f5;
+  --color-surface: #f7f8fa;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f3efe9;
-  --color-surface-container: #eee6da;
-  --color-surface-container-high: #e9ded0;
-  --color-surface-container-highest: #e3d7c4;
-  --color-outline-variant: #dccdbb;
-  --color-on-surface: #46100f;
-  --color-on-surface-variant: #6b4f49;
-  --color-primary: #ae5c4c;
-  --color-on-primary: #f8f7f5;
-  --color-secondary: #691619;
-  --color-tertiary: #7b6e5d;
+  --color-surface-container-low: #f1f3f6;
+  --color-surface-container: #e9edf2;
+  --color-surface-container-high: #e2e7ee;
+  --color-surface-container-highest: #d8dfe8;
+  --color-outline-variant: #d5dbe3;
+  --color-on-surface: #14213d;
+  --color-on-surface-variant: #4b5563;
+  --color-primary: #fca311; /* mandarine: fills (pills, buttons, markers) */
+  --color-primary-strong: #b45309; /* darker mandarine: text and icons on light backgrounds */
+  --color-on-primary: #14213d;
+  --color-secondary: #1b4d89; /* bleu de France */
+  --color-on-secondary: #ffffff;
+  --color-tertiary: #6b7280;
 
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -98,7 +100,7 @@
 }
 
 .leaflet-tile-pane {
-  filter: sepia(0.25) contrast(1.15) brightness(0.97);
+  filter: saturate(0.7) contrast(1.1);
 }
 
 .event-marker {
@@ -107,7 +109,7 @@
   animation: marker-in 0.4s ease-out both;
   transform-box: fill-box;
   transform-origin: center;
-  filter: drop-shadow(0 1px 2px rgb(70 16 15 / 0.45));
+  filter: drop-shadow(0 1px 2px rgb(20 33 61 / 0.45));
 }
 
 .leaflet-tooltip.event-tooltip {
@@ -116,7 +118,7 @@
   border: 1px solid var(--color-outline-variant);
   border-radius: 8px;
   background: var(--color-surface);
-  box-shadow: 0 4px 12px rgb(70 16 15 / 0.15);
+  box-shadow: 0 4px 12px rgb(20 33 61 / 0.15);
   color: var(--color-on-surface);
   font-family: var(--font-serif);
   font-size: 14px;

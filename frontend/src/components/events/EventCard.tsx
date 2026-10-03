@@ -56,12 +56,12 @@ export function EventCard({ event, isActive, index, onActivate }: EventCardProps
           <div className="mb-1 flex items-center gap-2">
             <CategoryTag category={event.category} />
             {event.is_free && (
-              <span className="ml-auto rounded-full bg-surface-container-highest px-2 py-0.5 text-label-sm text-primary">
+              <span className="ml-auto rounded-full bg-surface-container-highest px-2 py-0.5 text-label-sm text-primary-strong">
                 {TEXTS.free}
               </span>
             )}
           </div>
-          <h3 className="line-clamp-1 font-serif text-headline-sm leading-snug transition-colors group-hover:text-primary">
+          <h3 className="line-clamp-1 font-serif text-headline-sm leading-snug transition-colors group-hover:text-secondary">
             {event.title}
           </h3>
           <p className="mt-0.5 line-clamp-1 text-body-sm text-on-surface-variant">{formatVenue(event.location)}</p>

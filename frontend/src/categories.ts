@@ -7,14 +7,14 @@ export interface Category {
 }
 
 export const CATEGORIES: Category[] = [
-  { key: 'concert', label: 'Concert', color: '#ae5c4c' },
-  { key: 'theatre', label: 'Théâtre', color: '#691619' },
-  { key: 'danse', label: 'Danse & spectacle', color: '#c98b6b' },
-  { key: 'expo', label: 'Expo', color: '#8c7b62' },
-  { key: 'sport', label: 'Sport', color: '#46100f' },
-  { key: 'enfants', label: 'Enfants', color: '#d4a373' },
-  { key: 'atelier', label: 'Atelier & loisirs', color: '#625a4b' },
-  { key: 'autre', label: 'Autre', color: '#a99b8a' },
+  { key: 'concert', label: 'Concert', color: '#fca311' },
+  { key: 'theatre', label: 'Théâtre', color: '#1b4d89' },
+  { key: 'danse', label: 'Danse & spectacle', color: '#e85d04' },
+  { key: 'expo', label: 'Expo', color: '#3a86c8' },
+  { key: 'sport', label: 'Sport', color: '#14213d' },
+  { key: 'enfants', label: 'Enfants', color: '#2a9d8f' },
+  { key: 'atelier', label: 'Atelier & loisirs', color: '#64748b' },
+  { key: 'autre', label: 'Autre', color: '#a3a3a3' },
 ]
 
 export const CATEGORY_BY_KEY = Object.fromEntries(CATEGORIES.map((c) => [c.key, c])) as Record<

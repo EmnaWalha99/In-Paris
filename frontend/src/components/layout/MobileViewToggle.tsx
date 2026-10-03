@@ -14,7 +14,7 @@ export function MobileViewToggle({ view, onChange }: MobileViewToggleProps) {
     <button
       type="button"
       onClick={() => onChange(showsList ? 'map' : 'list')}
-      className="absolute bottom-5 left-1/2 z-above-map flex -translate-x-1/2 items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-label-md uppercase text-on-primary shadow-lg lg:hidden"
+      className="absolute bottom-5 left-1/2 z-above-map flex -translate-x-1/2 items-center gap-2 rounded-full bg-secondary px-5 py-2.5 text-label-md uppercase text-on-secondary shadow-lg lg:hidden"
     >
       <Icon name={showsList ? 'map' : 'list'} />
       {showsList ? TEXTS.map.showMap : TEXTS.map.showList}

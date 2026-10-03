@@ -32,7 +32,7 @@ function App() {
   }
 
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-[1440px] flex-col bg-surface font-sans text-on-surface">
+    <div className="flex h-dvh w-full flex-col bg-surface font-sans text-on-surface">
       <Header>
         <DayPicker days={days} selected={date} onSelect={changeDate} />
       </Header>

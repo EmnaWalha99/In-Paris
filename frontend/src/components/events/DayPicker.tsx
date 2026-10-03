@@ -17,12 +17,12 @@ export function DayPicker({ days, selected, onSelect }: DayPickerProps) {
   return (
     <nav className="no-scrollbar -mx-5 flex items-center gap-1.5 overflow-x-auto px-5 py-1 sm:mx-0 sm:px-0" aria-label="Jour">
       {days.map((day) => (
-        <Pill key={day.value} active={day.value === selected} onClick={() => onSelect(day.value)}>
+        <Pill key={day.value} variant="inverse" active={day.value === selected} onClick={() => onSelect(day.value)}>
           {day.label}
         </Pill>
       ))}
       <div className="relative shrink-0">
-        <Pill active={isOtherDay} onClick={() => dateInput.current?.showPicker()}>
+        <Pill variant="inverse" active={isOtherDay} onClick={() => dateInput.current?.showPicker()}>
           <Icon name="calendar_month" size={16} />
           {isOtherDay ? formatShortDate(selected) : <span className="sr-only">{TEXTS.pickDate}</span>}
         </Pill>

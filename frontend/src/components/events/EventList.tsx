@@ -27,7 +27,7 @@ export function EventList({ date, events, total, status, activeId, onActivate, .
   return (
     <div className="flex h-full flex-col overflow-hidden bg-surface-container-lowest">
       <div className="shrink-0 bg-surface-container-low px-6 py-4">
-        <h2 className="text-label-md uppercase tracking-widest text-primary">
+        <h2 className="text-label-md uppercase tracking-widest text-secondary">
           {status === 'ready' && `${TEXTS.eventCount(total)} · `}
           {formatLongDate(date)}
         </h2>
@@ -74,7 +74,7 @@ function LoadMoreButton({ remaining, loading, onClick }: { remaining: number; lo
         type="button"
         onClick={onClick}
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-surface-container-high px-4 py-3 text-label-md uppercase text-primary transition-colors hover:bg-surface-container-highest disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-surface-container-high px-4 py-3 text-label-md uppercase text-secondary transition-colors hover:bg-surface-container-highest disabled:opacity-60"
       >
         {loading ? TEXTS.loadingMore : TEXTS.loadMore(remaining)}
         <Icon name="arrow_downward" />
