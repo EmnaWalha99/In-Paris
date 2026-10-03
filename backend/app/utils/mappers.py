@@ -61,8 +61,17 @@ def _category(tags: list[str]) -> str:
     return "autre"
 
 
+def _arrondissement(zipcode: str | None) -> int | None:
+    """'75005' -> 5, '75116' -> 16 (the 16th has two zip codes), anything outside Paris -> None."""
+    if not zipcode or not zipcode.isdigit() or not zipcode.startswith("75"):
+        return None
+    number = int(zipcode[2:]) % 100
+    return number if 1 <= number <= 20 else None
+
+
 def _location(record: dict) -> Location:
-    city = " ".join(filter(None, [_text(record.get("address_zipcode")), _text(record.get("address_city"))]))
+    zipcode = _text(record.get("address_zipcode"))
+    city = " ".join(filter(None, [zipcode, _text(record.get("address_city"))]))
     address = ", ".join(filter(None, [_text(record.get("address_street")), city]))
     # Some events (street markets...) only have a free-text place in `locations`.
     locations = record.get("locations") or [{}]
@@ -70,6 +79,7 @@ def _location(record: dict) -> Location:
     return Location(
         name=_text(record.get("address_name")),
         address=address or _strip_html(locations[0].get("text")),
+        arrondissement=_arrondissement(zipcode),
         lat=lat_lon.get("lat"),
         lon=lat_lon.get("lon"),
     )

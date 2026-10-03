@@ -47,3 +47,10 @@ def test_map_event_category():
     assert map_event(make_record(qfap_tags="Concert;Festival")).category == "concert"
     assert map_event(make_record(qfap_tags="Atelier;Enfants")).category == "enfants"
     assert map_event(make_record(qfap_tags="Conférence")).category == "autre"
+
+
+def test_map_event_arrondissement():
+    assert map_event(make_record(address_zipcode="75005")).location.arrondissement == 5
+    assert map_event(make_record(address_zipcode="75116")).location.arrondissement == 16
+    assert map_event(make_record(address_zipcode="92100")).location.arrondissement is None
+    assert map_event(make_record(address_zipcode=None)).location.arrondissement is None

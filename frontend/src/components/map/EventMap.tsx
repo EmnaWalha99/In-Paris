@@ -1,5 +1,5 @@
 import { latLngBounds, point, type Map as LeafletMap } from 'leaflet'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import type { Event } from '../../types'
 import { MAP } from '../../config'
@@ -16,6 +16,7 @@ interface EventMapProps {
   onClose: () => void
   fitKey: string // changes with the day/category: the map then re-fits on the new events
   visible: boolean
+  children?: ReactNode // extra map layers, e.g. the arrondissements
 }
 
 function fitToEvents(map: LeafletMap, events: LocatedEvent[]) {
@@ -26,7 +27,7 @@ function fitToEvents(map: LeafletMap, events: LocatedEvent[]) {
   else map.fitBounds(bounds, { padding, maxZoom: MAP.maxZoom - 1 })
 }
 
-export function EventMap({ events, activeId, onActivate, onClose, fitKey, visible }: EventMapProps) {
+export function EventMap({ events, activeId, onActivate, onClose, fitKey, visible, children }: EventMapProps) {
   const [map, setMap] = useState<LeafletMap | null>(null)
   const fittedKey = useRef<string | null>(null)
   const located = events.filter(isLocated)
@@ -47,6 +48,7 @@ export function EventMap({ events, activeId, onActivate, onClose, fitKey, visibl
       <MapContainer ref={setMap} center={MAP.center} zoom={MAP.zoom} zoomControl={false} className="h-full w-full">
         <TileLayer url={MAP.baseTilesUrl} attribution={MAP.attribution} maxZoom={MAP.maxZoom} />
         <TileLayer url={MAP.labelTilesUrl} maxZoom={MAP.maxZoom} />
+        {children}
         {located.map((event) => {
           const isActive = event.id === activeId
           return (

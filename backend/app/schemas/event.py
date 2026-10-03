@@ -11,6 +11,7 @@ class Session(BaseModel):
 class Location(BaseModel):
     name: str | None = None
     address: str | None = None
+    arrondissement: int | None = None  # 1-20, None outside Paris
     # None when the API has no position: the frontend skips the map marker.
     lat: float | None = None
     lon: float | None = None

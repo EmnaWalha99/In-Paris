@@ -23,11 +23,12 @@ async def list_events(
     client: ClientDep,
     day: Annotated[date | None, Query(alias="date", description="Defaults to today (Paris time)")] = None,
     category: str | None = None,
+    arrondissement: Annotated[list[int] | None, Query(description="Repeat to select several, e.g. ?arrondissement=5&arrondissement=11")] = None,
     limit: Annotated[int, Query(ge=1, le=30)] = 30,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> EventList:
     day = day or datetime.now(ZoneInfo("Europe/Paris")).date()
-    return await service.list_events(client, day, category, limit, offset)
+    return await service.list_events(client, day, category, arrondissement, limit, offset)
 
 
 @router.get("/{event_id}", response_model=Event)

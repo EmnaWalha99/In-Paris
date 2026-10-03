@@ -9,6 +9,7 @@ export interface Session {
 export interface Location {
   name: string | null
   address: string | null
+  arrondissement: number | null // 1-20, null outside Paris
   lat: number | null
   lon: number | null
 }
@@ -37,6 +38,7 @@ export interface EventList {
 export interface EventFilters {
   date: string // YYYY-MM-DD
   category: CategoryKey | null
+  arrondissements: number[]
   limit: number
   offset?: number
 }

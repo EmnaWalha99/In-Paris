@@ -7,11 +7,12 @@ import { getNextDay } from '../utils/format'
 
 export type EventsStatus = 'loading' | 'ready' | 'error'
 
-// One cache entry per day + category; each "load more" adds a page of PAGE_SIZE events.
-const eventsQuery = (date: string, category: CategoryKey | null) =>
+// One cache entry per day + category + arrondissements; each "load more" adds a page of PAGE_SIZE events.
+const eventsQuery = (date: string, category: CategoryKey | null, arrondissements: number[]) =>
   infiniteQueryOptions({
-    queryKey: ['events', date, category],
-    queryFn: ({ pageParam, signal }) => fetchEvents({ date, category, limit: PAGE_SIZE, offset: pageParam }, signal),
+    queryKey: ['events', date, category, arrondissements],
+    queryFn: ({ pageParam, signal }) =>
+      fetchEvents({ date, category, arrondissements, limit: PAGE_SIZE, offset: pageParam }, signal),
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       const loaded = pages.reduce((count, page) => count + page.items.length, 0)
@@ -19,14 +20,14 @@ const eventsQuery = (date: string, category: CategoryKey | null) =>
     },
   })
 
-export function useEvents(date: string, category: CategoryKey | null) {
+export function useEvents(date: string, category: CategoryKey | null, arrondissements: number[]) {
   const queryClient = useQueryClient()
-  const query = useInfiniteQuery(eventsQuery(date, category))
+  const query = useInfiniteQuery(eventsQuery(date, category, arrondissements))
 
   // Load the next day in the background so clicking it is instant.
   useEffect(() => {
-    queryClient.prefetchInfiniteQuery(eventsQuery(getNextDay(date), category))
-  }, [queryClient, date, category])
+    queryClient.prefetchInfiniteQuery(eventsQuery(getNextDay(date), category, arrondissements))
+  }, [queryClient, date, category, arrondissements])
 
   const items = useMemo(() => query.data?.pages.flatMap((page) => page.items) ?? [], [query.data])
   // A failed "load more" keeps the events already loaded on screen.
@@ -36,7 +37,7 @@ export function useEvents(date: string, category: CategoryKey | null) {
     items,
     total: query.data?.pages[0].total ?? 0,
     status,
-    loadedFor: query.data ? `${date}|${category}` : '',
+    loadedFor: query.data ? `${date}|${category}|${arrondissements}` : '',
     loadingMore: query.isFetchingNextPage,
     hasMore: query.hasNextPage,
     loadMore: () => query.fetchNextPage(),

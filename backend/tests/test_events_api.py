@@ -38,6 +38,19 @@ def test_list_events_filters_by_category(api_client_factory):
     assert [e["id"] for e in body["items"]] == ["expo"]
 
 
+def test_list_events_filters_by_arrondissements(api_client_factory):
+    records = [
+        make_record("5e", address_zipcode="75005"),
+        make_record("11e", address_zipcode="75011"),
+        make_record("18e", address_zipcode="75018"),
+    ]
+    client = api_client_factory(respond_with(records))
+
+    body = client.get("/events", params={"date": "2026-10-05", "arrondissement": [5, 11]}).json()
+
+    assert sorted(e["id"] for e in body["items"]) == ["11e", "5e"]
+
+
 def test_list_events_pagination(api_client_factory):
     records = [make_record(str(i), f"2026-10-05T{10 + i}:00:00+02:00_") for i in range(5)]
     client = api_client_factory(respond_with(records))

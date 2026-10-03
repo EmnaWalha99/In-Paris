@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Event } from '../../types'
 import type { EventsStatus } from '../../hooks/useEvents'
 import { TEXTS } from '../../texts'
@@ -19,9 +20,10 @@ interface EventListProps {
   onLoadMore: () => void
   onRetry: () => void
   onBackToToday?: () => void
+  filters?: ReactNode // shown under the title, e.g. the selected arrondissements
 }
 
-export function EventList({ date, events, total, status, activeId, onActivate, ...actions }: EventListProps) {
+export function EventList({ date, events, total, status, activeId, onActivate, filters, ...actions }: EventListProps) {
   const isEmpty = status === 'ready' && events.length === 0
 
   return (
@@ -32,6 +34,7 @@ export function EventList({ date, events, total, status, activeId, onActivate, .
           {formatLongDate(date)}
         </h2>
         <p className="mt-0.5 text-body-sm text-on-surface-variant">{TEXTS.sortedByTime}</p>
+        {filters}
       </div>
 
       {status === 'loading' && <EventListSkeleton />}

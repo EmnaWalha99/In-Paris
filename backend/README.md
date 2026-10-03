@@ -32,11 +32,11 @@ The tests mock the Paris API, so they run without network access.
 
 | Method | Path | Description |
 |---|---|---|
-| GET | `/events?date=YYYY-MM-DD&category=concert&limit=30&offset=0` | Events with a session on that day (default: today, Paris time), sorted by time |
+| GET | `/events?date=YYYY-MM-DD&category=concert&arrondissement=5&arrondissement=11&limit=30&offset=0` | Events with a session on that day (default: today, Paris time), sorted by time |
 | GET | `/events/{id}` | One event with all its sessions |
 | GET | `/health` | Health check |
 
-`category` is one of `concert`, `theatre`, `danse`, `expo`, `sport`, `enfants`, `atelier`, `autre`.
+`category` is one of `concert`, `theatre`, `danse`, `expo`, `sport`, `enfants`, `atelier`, `autre`. `arrondissement` (1–20) can be repeated to select several.
 
 ## Configuration
 
